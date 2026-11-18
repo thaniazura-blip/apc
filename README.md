@@ -21,6 +21,14 @@ npm run build
 npm start
 ```
 
+## Deploy ke GitHub Pages
+
+Setiap push ke `main` membina laman statik dan menerbitkannya ke GitHub Pages.
+
+https://thaniazura-blip.github.io/apc/
+
+Binaan Pages menggunakan `GITHUB_PAGES=true` dan `NEXT_PUBLIC_BASE_PATH=/apc`. `npm run dev` di mesin sendiri tidak memerlukan pembolehubah itu.
+
 ## Sumber rasmi
 
 Maklumat hubungan, logo dan pautan media sosial dirujuk daripada [penerangan.gov.my](https://www.penerangan.gov.my). Lokasi PICC dirujuk daripada [picc.com.my](https://www.picc.com.my).

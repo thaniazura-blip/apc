@@ -20,6 +20,9 @@ const description =
   "Platform pengiktirafan bagi menghargai warga Jabatan Penerangan yang berdedikasi dalam kerja, berinovasi berimpak tinggi dan mempunyai daya transformatif yang memacu kecemerlangan organisasi.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://thaniazura-blip.github.io",
+  ),
   title: {
     default: `${event.name} | ${event.organizer}`,
     template: `%s | ${event.name}`,
