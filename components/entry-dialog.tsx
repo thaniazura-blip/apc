@@ -41,15 +41,6 @@ export function useEntry() {
   return value;
 }
 
-const empty = {
-  nama: "",
-  bahagian: "",
-  emel: "",
-  telefon: "",
-  kategori: categories[0].title,
-  ringkasan: "",
-};
-
 export function EntryProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
@@ -90,7 +81,6 @@ function EntryDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [form, setForm] = useState(empty);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState<Draft | null>(null);
 
@@ -108,16 +98,15 @@ function EntryDialog({
     }
   }, [open]);
 
-  function update(field: keyof typeof empty, value: string) {
-    setForm((current) => ({ ...current, [field]: value }));
-  }
-
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const nama = form.nama.trim();
-    const bahagian = form.bahagian.trim();
-    const emel = form.emel.trim();
-    const ringkasan = form.ringkasan.trim();
+    const data = new FormData(event.currentTarget);
+    const nama = String(data.get("nama") ?? "").trim();
+    const bahagian = String(data.get("bahagian") ?? "").trim();
+    const emel = String(data.get("emel") ?? "").trim();
+    const telefon = String(data.get("telefon") ?? "").trim();
+    const kategori = String(data.get("kategori") ?? categories[0].title);
+    const ringkasan = String(data.get("ringkasan") ?? "").trim();
 
     if (nama.length < 3) {
       setError("Masukkan nama penuh.");
@@ -131,7 +120,7 @@ function EntryDialog({
       setError("Masukkan emel yang sah.");
       return;
     }
-    if (form.telefon.trim() && !/^[0-9+\-\s]{8,}$/.test(form.telefon.trim())) {
+    if (telefon && !/^[0-9+\-\s]{8,}$/.test(telefon)) {
       setError("Nombor telefon hanya perlu mengandungi angka, ruang atau simbol +.");
       return;
     }
@@ -141,11 +130,11 @@ function EntryDialog({
     }
 
     const draft: Draft = {
-      ...form,
       nama,
       bahagian,
       emel,
-      telefon: form.telefon.trim(),
+      telefon,
+      kategori,
       ringkasan,
       disimpanPada: new Date().toISOString(),
     };
@@ -162,7 +151,6 @@ function EntryDialog({
   function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
     setSaved(null);
-    setForm(empty);
   }
 
   return (
@@ -215,8 +203,7 @@ function EntryDialog({
             <Field label="Nama penuh" htmlFor="nama">
               <Input
                 id="nama"
-                value={form.nama}
-                onChange={(event) => update("nama", event.target.value)}
+                name="nama"
                 autoComplete="name"
                 className="h-11"
                 required
@@ -225,8 +212,7 @@ function EntryDialog({
             <Field label="Bahagian atau unit" htmlFor="bahagian">
               <Input
                 id="bahagian"
-                value={form.bahagian}
-                onChange={(event) => update("bahagian", event.target.value)}
+                name="bahagian"
                 className="h-11"
                 required
               />
@@ -235,9 +221,8 @@ function EntryDialog({
               <Field label="Emel" htmlFor="emel">
                 <Input
                   id="emel"
+                  name="emel"
                   type="email"
-                  value={form.emel}
-                  onChange={(event) => update("emel", event.target.value)}
                   autoComplete="email"
                   className="h-11"
                   required
@@ -246,9 +231,8 @@ function EntryDialog({
               <Field label="Telefon (pilihan)" htmlFor="telefon">
                 <Input
                   id="telefon"
+                  name="telefon"
                   inputMode="tel"
-                  value={form.telefon}
-                  onChange={(event) => update("telefon", event.target.value)}
                   autoComplete="tel"
                   className="h-11"
                 />
@@ -257,8 +241,8 @@ function EntryDialog({
             <Field label="Kategori diminati" htmlFor="kategori">
               <select
                 id="kategori"
-                value={form.kategori}
-                onChange={(event) => update("kategori", event.target.value)}
+                name="kategori"
+                defaultValue={categories[0].title}
                 className="h-11 w-full rounded-lg border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {categories.map((category) => (
@@ -271,8 +255,7 @@ function EntryDialog({
             <Field label="Ringkasan sumbangan" htmlFor="ringkasan">
               <Textarea
                 id="ringkasan"
-                value={form.ringkasan}
-                onChange={(event) => update("ringkasan", event.target.value)}
+                name="ringkasan"
                 className="min-h-28"
                 placeholder="Nyatakan hasil kerja, impak dan siapa yang terbantu."
               />

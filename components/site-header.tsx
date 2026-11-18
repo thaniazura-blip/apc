@@ -46,13 +46,8 @@ export function SiteHeader() {
               className="h-8 w-auto md:h-9"
             />
           </span>
-          <span className="hidden min-w-0 lg:block">
-            <span className="block truncate text-[0.65rem] tracking-[0.28em] text-gold uppercase">
-              {event.short}
-            </span>
-            <span className="block truncate text-sm text-white">
-              Anugerah Prestasi Cemerlang
-            </span>
+          <span className="hidden text-[0.68rem] tracking-[0.22em] whitespace-nowrap text-gold uppercase sm:block">
+            {event.short}
           </span>
         </Link>
 

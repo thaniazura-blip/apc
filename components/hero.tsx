@@ -9,17 +9,7 @@ import { event } from "@/lib/content";
 
 const ceremony = new Date("2026-11-30T00:00:00+08:00").getTime();
 
-function useCountdown() {
-  const [now, setNow] = useState<number | null>(null);
-
-  useEffect(() => {
-    const tick = () => setNow(Date.now());
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  if (now === null) return null;
+function readCountdown(now: number) {
   const diff = Math.max(0, ceremony - now);
   const day = 24 * 60 * 60 * 1000;
   return {
@@ -27,6 +17,19 @@ function useCountdown() {
     hours: Math.floor((diff % day) / (60 * 60 * 1000)),
     minutes: Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000)),
   };
+}
+
+function useCountdown() {
+  const [countdown, setCountdown] = useState(() => readCountdown(Date.now()));
+
+  useEffect(() => {
+    const tick = () => setCountdown(readCountdown(Date.now()));
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return countdown;
 }
 
 export function Hero() {
@@ -38,8 +41,8 @@ export function Hero() {
       <div className="hero-grid pointer-events-none absolute inset-0" />
       <MeteorField />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pt-10 pb-12 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:pt-16 lg:pb-16">
-        <div>
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pt-10 pb-12 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:pt-16 lg:pb-8">
+        <div className="order-1">
           <p className="text-[0.72rem] tracking-[0.34em] text-gold uppercase">
             {event.organizer} · {event.dateLabel}
           </p>
@@ -84,29 +87,25 @@ export function Hero() {
           </div>
         </div>
 
-        <Trophy />
-      </div>
+        <div className="order-3 mx-auto w-full max-w-xs lg:order-2 lg:max-w-none">
+          <Trophy />
+        </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+        <div className="relative order-2 lg:order-3 lg:col-span-2">
         <dl className="grid border border-gold/25 bg-white/[0.03] backdrop-blur-md sm:grid-cols-3">
           <Info term="Tarikh majlis" detail={event.dateLabel} extra="Isnin, Putrajaya" />
           <Info term="Lokasi" detail={event.venue} extra={event.venueAddress} />
           <Info
             term="Menghitung hari"
             detail={
-              countdown
-                ? countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0
-                  ? "Hari majlis"
-                  : `${countdown.days} hari`
-                : "—"
+              countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0
+                ? "Hari majlis"
+                : `${countdown.days} hari`
             }
-            extra={
-              countdown
-                ? `${String(countdown.hours).padStart(2, "0")} jam ${String(countdown.minutes).padStart(2, "0")} minit`
-                : "Waktu Malaysia"
-            }
+            extra={`${String(countdown.hours).padStart(2, "0")} jam ${String(countdown.minutes).padStart(2, "0")} minit`}
           />
         </dl>
+        </div>
       </div>
 
       <div className="relative mt-8">
