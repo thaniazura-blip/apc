@@ -63,10 +63,6 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <EntryButton className="ml-auto hidden h-10 rounded-full bg-gold px-5 text-[0.72rem] tracking-[0.16em] text-[#1a1408] uppercase hover:bg-gold-2 xl:ml-6 xl:inline-flex">
-          Hantar Penyertaan
-        </EntryButton>
-
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
             className="ml-auto inline-flex size-10 items-center justify-center rounded-full border border-gold/30 text-white xl:hidden"
