@@ -112,7 +112,10 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-mist md:flex-row md:items-center md:justify-between md:px-6">
           <p>© {new Date().getFullYear()} Jabatan Penerangan Malaysia.</p>
-          <p>Anugerah Prestasi Cemerlang 2026. Semua hak cipta terpelihara.</p>
+          <p className="max-w-xl">
+            Foto PICC oleh CEphoto, Uwe Aranas, Wikimedia Commons (CC BY-SA).
+            Foto lain ialah stok Unsplash dan Pexels, bukan rakaman majlis ini.
+          </p>
         </div>
       </div>
     </footer>

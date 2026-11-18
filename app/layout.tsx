@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Outfit } from "next/font/google";
+import { Oswald, Outfit } from "next/font/google";
 import { EntryProvider } from "@/components/entry-dialog";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -11,9 +11,8 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-const bodoni = Bodoni_Moda({
+const display = Oswald({
   subsets: ["latin"],
-  style: ["normal", "italic"],
   variable: "--font-bodoni",
 });
 
@@ -77,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ms" className={`dark ${outfit.variable} ${bodoni.variable}`}>
+    <html lang="ms" className={`dark ${outfit.variable} ${display.variable}`}>
       <body className="min-h-screen bg-black font-sans text-foreground antialiased">
         <script
           type="application/ld+json"

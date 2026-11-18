@@ -1,10 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MeteorField } from "@/components/meteor-field";
 import { ProfessionMarquee } from "@/components/profession-marquee";
-import { Trophy } from "@/components/trophy";
 import { event } from "@/lib/content";
 
 const ceremony = new Date("2026-11-30T00:00:00+08:00").getTime();
@@ -20,115 +19,91 @@ function readCountdown(now: number) {
 }
 
 function useCountdown() {
-  const [countdown, setCountdown] = useState(() => readCountdown(Date.now()));
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const tick = () => setCountdown(readCountdown(Date.now()));
+    const tick = () => setNow(Date.now());
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  return countdown;
+  return readCountdown(now);
 }
 
 export function Hero() {
   const countdown = useCountdown();
+  const clock =
+    countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0
+      ? "Hari majlis"
+      : `${countdown.days} hari`;
 
   return (
-    <section id="utama" className="relative overflow-hidden pt-20">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(214,181,109,0.18),transparent_42%),radial-gradient(ellipse_at_bottom_left,rgba(214,181,109,0.08),transparent_40%)]" />
-      <div className="hero-grid pointer-events-none absolute inset-0" />
-      <MeteorField />
+    <section id="utama" className="bg-black">
+      <div className="relative min-h-[100svh]">
+        <Image
+          src="/photos/hero.jpg"
+          alt="Dewan majlis yang penuh penonton. Foto suasana, bukan rakaman Anugerah Prestasi Cemerlang 2026."
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pt-10 pb-12 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:pt-16 lg:pb-8">
-        <div className="order-1">
-          <p className="text-[0.72rem] tracking-[0.34em] text-gold uppercase">
-            {event.organizer} · {event.dateLabel}
+        <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-4 pt-28 pb-8 md:px-6">
+          <p className="text-[0.72rem] tracking-[0.38em] text-gold uppercase">
+            {event.organizer}
           </p>
-          <p className="font-display mt-6 text-5xl leading-[0.9] text-white sm:text-7xl lg:text-[5.6rem]">
-            KOMPETENSI
-            <span className="gold-text mt-1 block italic">memacu</span>
-            PRESTASI
-          </p>
-          <p className="mt-8 max-w-xl text-base leading-relaxed text-mist md:text-lg">
+          <h1 className="font-display mt-4 max-w-5xl text-[14vw] leading-[0.86] text-white uppercase sm:text-7xl lg:text-[6.5rem]">
+            Kompetensi
+            <span className="block text-gold">memacu</span>
+            prestasi
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
             Platform pengiktirafan bagi menghargai warga Jabatan Penerangan yang
             berdedikasi dalam kerja, berinovasi berimpak tinggi dan mempunyai
             daya transformatif yang memacu kecemerlangan organisasi.
           </p>
-
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/#kategori"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-gold px-7 text-[0.75rem] font-medium tracking-[0.18em] text-[#1a1408] uppercase transition hover:bg-gold-2"
+              className="inline-flex h-12 items-center justify-center bg-gold px-7 text-[0.75rem] font-medium tracking-[0.18em] text-[#1a1408] uppercase hover:bg-gold-2"
             >
               Terokai Anugerah
             </Link>
             <Link
               href="/#kategori"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-gold/40 px-7 text-[0.75rem] tracking-[0.18em] text-white uppercase transition hover:bg-gold/10"
+              className="inline-flex h-12 items-center justify-center border border-white/40 px-7 text-[0.75rem] tracking-[0.18em] text-white uppercase hover:bg-white/10"
             >
               Lihat Kategori Anugerah
             </Link>
           </div>
 
-          <div className="mt-8 flex items-center gap-3 text-sm text-mist">
-            <span className="relative flex size-2.5">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-gold/60 motion-reduce:animate-none" />
-              <span className="relative inline-flex size-2.5 rounded-full bg-gold" />
-            </span>
-            <span>
-              Status: <span className="text-white">{event.status}</span>
-            </span>
-            <span className="text-gold/50" aria-hidden="true">
-              /
-            </span>
-            <span>Edisi {event.dateIso.slice(0, 4)}</span>
-          </div>
-        </div>
-
-        <div className="order-3 mx-auto w-full max-w-xs lg:order-2 lg:max-w-none">
-          <Trophy />
-        </div>
-
-        <div className="relative order-2 lg:order-3 lg:col-span-2">
-        <dl className="grid border border-gold/25 bg-white/[0.03] backdrop-blur-md sm:grid-cols-3">
-          <Info term="Tarikh majlis" detail={event.dateLabel} extra="Isnin, Putrajaya" />
-          <Info term="Lokasi" detail={event.venue} extra={event.venueAddress} />
-          <Info
-            term="Menghitung hari"
-            detail={
-              countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0
-                ? "Hari majlis"
-                : `${countdown.days} hari`
-            }
-            extra={`${String(countdown.hours).padStart(2, "0")} jam ${String(countdown.minutes).padStart(2, "0")} minit`}
-          />
-        </dl>
+          <dl className="mt-10 grid border-t border-white/25 sm:grid-cols-3">
+            <div className="border-white/15 py-4 sm:pr-6 sm:not-last:border-r">
+              <dt className="text-[0.65rem] tracking-[0.22em] text-gold uppercase">Tarikh majlis</dt>
+              <dd className="font-display mt-1 text-2xl text-white uppercase">{event.dateLabel}</dd>
+            </div>
+            <div className="border-white/15 py-4 sm:px-6 sm:not-last:border-r">
+              <dt className="text-[0.65rem] tracking-[0.22em] text-gold uppercase">Lokasi</dt>
+              <dd className="font-display mt-1 text-2xl text-white uppercase">{event.venue}</dd>
+              <dd className="text-sm text-white/70">{event.venueAddress}</dd>
+            </div>
+            <div className="py-4 sm:pl-6">
+              <dt className="text-[0.65rem] tracking-[0.22em] text-gold uppercase">
+                Status · {event.status}
+              </dt>
+              <dd className="font-display mt-1 text-2xl text-white uppercase">{clock}</dd>
+              <dd className="text-sm text-white/70">
+                {String(countdown.hours).padStart(2, "0")} jam {String(countdown.minutes).padStart(2, "0")} minit
+              </dd>
+            </div>
+          </dl>
         </div>
       </div>
-
-      <div className="relative mt-8">
-        <ProfessionMarquee />
-      </div>
+      <ProfessionMarquee />
     </section>
-  );
-}
-
-function Info({
-  term,
-  detail,
-  extra,
-}: {
-  term: string;
-  detail: string;
-  extra: string;
-}) {
-  return (
-    <div className="border-gold/20 px-5 py-5 not-last:border-b sm:not-last:border-r sm:not-last:border-b-0">
-      <dt className="text-[0.68rem] tracking-[0.22em] text-gold uppercase">{term}</dt>
-      <dd className="font-display mt-2 text-2xl text-white">{detail}</dd>
-      <dd className="mt-1 text-sm text-mist">{extra}</dd>
-    </div>
   );
 }

@@ -7,6 +7,7 @@ import { Faq } from "@/components/faq";
 import { Guidelines } from "@/components/guidelines";
 import { Hero } from "@/components/hero";
 import { Process } from "@/components/process";
+import { Venue } from "@/components/venue";
 import { Why } from "@/components/why";
 import { Winners } from "@/components/winners";
 
@@ -14,6 +15,7 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
+      <Venue />
       <About />
       <Categories />
       <Why />

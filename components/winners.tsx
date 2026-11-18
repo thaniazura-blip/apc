@@ -1,6 +1,22 @@
+import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { winners } from "@/lib/content";
+
+const photos = [
+  {
+    src: "/photos/edit.jpg",
+    alt: "Skrin suntingan video. Foto stok, bukan projek pemenang.",
+  },
+  {
+    src: "/photos/camera.jpg",
+    alt: "Kamera dan lensa. Foto stok, bukan projek pemenang.",
+  },
+  {
+    src: "/photos/journalist.jpg",
+    alt: "Pen di atas kertas. Foto stok, bukan projek pemenang.",
+  },
+];
 
 export function Winners() {
   return (
@@ -10,40 +26,36 @@ export function Winners() {
           <SectionHeading
             kicker="Contoh editorial"
             title="Inspirasi Daripada Pemenang Terdahulu"
-            lede="Tiga kad di bawah ialah kandungan demonstrasi. Tiada pemenang sebenar dinamakan. Imej ialah ilustrasi geometri, bukan gambar projek."
+            lede="Tiga kad di bawah ialah kandungan demonstrasi. Tiada pemenang sebenar dinamakan. Fotonya stok, bukan gambar projek atau orang yang menang."
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-12">
+        <div className="mt-14 grid gap-4 lg:grid-cols-12">
           {winners.map((winner, index) => (
             <Reveal
               key={winner.title}
               delay={index * 0.06}
               className={index === 0 ? "lg:col-span-7" : "lg:col-span-5"}
             >
-              <article className="flex h-full flex-col border border-white/10">
-                <div
-                  className={`relative min-h-64 overflow-hidden bg-gradient-to-br ${winner.tone} ${index === 0 ? "lg:min-h-80" : ""}`}
-                >
-                  <div className="absolute top-6 left-6 border border-gold/50 bg-black/50 px-3 py-1 text-[0.65rem] tracking-[0.22em] text-gold uppercase">
-                    Contoh · bukan rekod rasmi
-                  </div>
-                  <div className="absolute inset-0 opacity-80">
-                    <div className="absolute top-16 right-10 size-28 rotate-12 border border-gold/40" />
-                    <div className="absolute bottom-8 left-10 h-px w-40 bg-gold/60" />
-                    <div className="absolute right-16 bottom-16 size-16 rounded-full border border-gold/30" />
-                  </div>
-                  <p className="font-display absolute bottom-6 left-6 text-5xl text-white/15">
-                    0{index + 1}
-                  </p>
+              <article className="group relative min-h-[26rem] overflow-hidden">
+                <Image
+                  src={photos[index].src}
+                  alt={photos[index].alt}
+                  fill
+                  sizes={index === 0 ? "(min-width: 1024px) 58vw, 100vw" : "(min-width: 1024px) 40vw, 100vw"}
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10" />
+                <div className="absolute top-5 left-5 border border-gold/70 bg-black/70 px-3 py-1 text-[0.65rem] tracking-[0.22em] text-gold uppercase">
+                  Contoh · bukan rekod rasmi
                 </div>
-                <div className="flex flex-1 flex-col p-6">
+                <div className="absolute inset-x-0 bottom-0 p-6">
                   <p className="text-[0.68rem] tracking-[0.2em] text-gold uppercase">
                     {winner.category}
                   </p>
-                  <h3 className="font-display mt-3 text-3xl text-white">{winner.title}</h3>
-                  <p className="mt-2 text-sm text-mist">{winner.organization}</p>
-                  <p className="mt-4 text-sm leading-relaxed text-mist">{winner.text}</p>
+                  <h3 className="font-display mt-2 text-4xl text-white uppercase">{winner.title}</h3>
+                  <p className="mt-2 text-sm text-white/75">{winner.organization}</p>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80">{winner.text}</p>
                 </div>
               </article>
             </Reveal>
